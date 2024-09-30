@@ -260,4 +260,77 @@ const truncatedDescription = computed(() => {
 
 ```
 
-## Routing
+## Component Registration
+
+- Global registration using .component() makes components available app-wide, but can lead to unused components in the final bundle.
+  Example:
+
+```bash
+Vue.component('ComponentA', ComponentA);
+```
+
+- Local registration limits component availability to the current component, improving app maintainability and allowing for tree-shaking.
+- In <**script setup**>, imported components can be used locally without registration, but in non-<**script setup**>, the components option is needed.
+  Example:
+
+```bash
+export default {
+  components: {
+    ComponentA,
+  },
+};
+```
+
+## Router
+
+```bash
+npm i vue-router
+```
+
+- Create folder named **router** add file named **index.js** that contain paths and their related components
+
+**index.js**
+
+```bash
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [{
+    path: '/', name: 'home', component: HomeViews
+  }]
+})
+
+export default router
+```
+
+- Create folder named views to add our pages
+- In main.js add the router from the index file under router and use it as middelware
+
+**main.js**
+
+```bash
+const app = createApp(App)
+
+app.use(router)
+app.mount('#app')
+
+```
+
+**FYI:** we can skip this part by taping yes when create new Vue project with Vue CLI
+
+```bash
+npm create vue@latest
+```
+
+**App.vue**
+
+- inside App.vue we add the RouterView from vue-router
+
+```bash
+<script setup>
+import { RouterView } from 'vue-router';
+</script>
+
+<template>
+  <RouterView />
+</template>
+```
