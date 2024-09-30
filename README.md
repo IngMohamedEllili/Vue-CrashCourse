@@ -339,3 +339,27 @@ import { RouterView } from 'vue-router';
 
 - Component to render a link that triggers a navigation on click.
 - Used to not refreshing the page (Single Page)
+
+## Reactive vs Ref
+
+- **reactive()** only takes objects. it does not take primitives like strings, numbers and booleans, it use ref() under the hood
+- **ref()** can take objects or primitives
+- **ref()** has a `.value` property for reassignig, `reactive()` doesn't use `.value` and can't be reassigned
+
+Example of reactive use case :
+
+```bash
+## A good use-case for reactive() is a group of primitives that belong together:
+
+const person = reactive({
+  name: 'Albert',
+  age: 30,
+  isNinja: true,
+});
+
+## the code above feels more logical than
+
+const name = ref('Albert');
+const age = ref(30);
+const isNinja = ref(true);
+```
