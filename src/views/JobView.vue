@@ -1,11 +1,14 @@
 <script setup>
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import axios from 'axios';
 import { reactive, onMounted } from 'vue';
 import BackButton from '@/components/BackButton.vue';
+import { useToast } from 'vue-toastification';
+
 const route = useRoute();
-console.log('👊 ~ file: JobView.vue:8 ~ route:', route);
+const router = useRouter();
+const toast = useToast();
 const jobId = route.params.id;
 const state = reactive({
   job: {},
@@ -14,7 +17,7 @@ const state = reactive({
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://localhost:5000/jobs/${jobId}`);
+    const response = await axios.get(`/api/jobs/${jobId}`);
     state.job = response.data;
   } catch (error) {
     console.error('Error fetching Jobs', error);
@@ -22,6 +25,20 @@ onMounted(async () => {
     state.isLoading = false;
   }
 });
+
+const handleDelete = async () => {
+  try {
+    const confirm = window.confirm('Are you sure you want to delete this job?');
+    if (confirm) {
+      const response = await axios.delete(`/api/jobs/${jobId}`);
+      toast.success('Job Deleted Successfully');
+      router.push('/jobs');
+    }
+  } catch (error) {
+    console.error('Error deleting job', error);
+    toast.error('Error deleting job');
+  }
+};
 </script>
 
 <template>
@@ -44,9 +61,7 @@ onMounted(async () => {
             <div
               class="text-gray-500 mb-4 flex align-middle justify-center md:justify-start"
             >
-              <i
-                class="fa-solid fa-location-dot text-lg text-orange-700 mr-2"
-              ></i>
+              <i class="pi pi-map-marker text-xl text-orange-700 mr-2"></i>
               <p class="text-orange-700">{{ state.job.location }}</p>
             </div>
           </div>
@@ -104,6 +119,7 @@ onMounted(async () => {
               >Edit Job</RouterLink
             >
             <button
+              @click="handleDelete"
               class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
             >
               Delete Job
