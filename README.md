@@ -338,4 +338,4 @@ import { RouterView } from 'vue-router';
 ## RouterLink
 
 - Component to render a link that triggers a navigation on click.
-- Used to not refreshing the page
+- Used to not refreshing the page (Single Page)
