@@ -334,3 +334,8 @@ import { RouterView } from 'vue-router';
   <RouterView />
 </template>
 ```
+
+## RouterLink
+
+- Component to render a link that triggers a navigation on click.
+- Used to not refreshing the page
